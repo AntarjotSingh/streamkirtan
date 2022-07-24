@@ -2,6 +2,7 @@ package com.example.streamkirtan
 
 import android.media.AudioAttributes
 import android.media.SoundPool
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
@@ -21,10 +22,13 @@ class MainActivity : AppCompatActivity() {
     lateinit var soundFile2: SoundFile
     lateinit var soundFile3: SoundFile
     lateinit var soundFile4: SoundFile
+    var playing = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //Audio Stream
         soundPool = SoundPool.Builder()
             .setAudioAttributes(
                 AudioAttributes.Builder()
@@ -45,6 +49,21 @@ class MainActivity : AppCompatActivity() {
         }
         sound4.setOnClickListener {
             toggleState(soundFile4, SOUND4)
+        }
+
+        //Video Stream
+        val path = "android.resource://" + packageName + "/" + R.raw.sample_video
+        videoview.setVideoURI(Uri.parse(path))
+        videoview.setOnClickListener {
+            when(playing) {
+                true -> {
+                    videoview.pause()
+                    playing = false
+                } else -> {
+                    videoview.start()
+                    playing = true
+                }
+            }
         }
     }
 
